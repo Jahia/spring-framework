@@ -36,7 +36,13 @@ simple step-by-step instructions.
 The Spring Framework uses a [Gradle][]-based build system. In the instructions
 below, [`./gradlew`][] is invoked from the root of the source tree and serves as
 a cross-platform, self-contained bootstrap mechanism for the build. The only
-prerequisites are [Git][] and JDK 1.7+.
+prerequisites are [Git][] and JDK 1.7.
+
+JDK 1.7 Only for building using gradle, some projects do not compile under JDK 1.8+
+but it is not possible to download https dependencies form apache.org or our nexus with JDK 1.7
+There is a pom.xml file to download all the needed dependency with maven and JDK 1.8
+just run `mvn dependency:resolve`
+Then in build.gradle replace `maven { url "/Users/rincevent/.m2/repository" }` with you local maven repository
 
 ### check out sources
 `git clone git://github.com/SpringSource/spring-framework.git`
