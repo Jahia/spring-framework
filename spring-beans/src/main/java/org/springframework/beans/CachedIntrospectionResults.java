@@ -22,6 +22,7 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
+import java.security.ProtectionDomain;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -302,9 +303,13 @@ public class CachedIntrospectionResults {
 			// This call is slow so we do it once.
 			PropertyDescriptor[] pds = this.beanInfo.getPropertyDescriptors();
 			for (PropertyDescriptor pd : pds) {
-				if (Class.class.equals(beanClass) &&
-						("classLoader".equals(pd.getName()) ||  "protectionDomain".equals(pd.getName()))) {
-					// Ignore Class.getClassLoader() and getProtectionDomain() methods - nobody needs to bind to those
+                if (Class.class == beanClass && (!"name".equals(pd.getName()) && !pd.getName().endsWith("Name"))) {
+                    // Only allow all name variants of Class properties
+                    continue;
+                }
+                if (pd.getPropertyType() != null && (ClassLoader.class.isAssignableFrom(pd.getPropertyType())
+                        || ProtectionDomain.class.isAssignableFrom(pd.getPropertyType()))) {
+                    // Ignore ClassLoader and ProtectionDomain types - nobody needs to bind to those
 					continue;
 				}
 				if (logger.isTraceEnabled()) {
@@ -314,6 +319,11 @@ public class CachedIntrospectionResults {
 									"; editor [" + pd.getPropertyEditorClass().getName() + "]" : ""));
 				}
 				pd = buildGenericTypeAwarePropertyDescriptor(beanClass, pd);
+                if (pd.getPropertyType() != null && (ClassLoader.class.isAssignableFrom(pd.getPropertyType())
+                        || ProtectionDomain.class.isAssignableFrom(pd.getPropertyType()))) {
+                    // Ignore ClassLoader and ProtectionDomain types - nobody needs to bind to those
+                    continue;
+                }
 				this.propertyDescriptorCache.put(pd.getName(), pd);
 			}
 		}

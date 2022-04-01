@@ -1,0 +1,6 @@
+-classpath:  spring-aspects-3.2.18.RELEASE.jar
+Bundle-SymbolicName: spring-aspects
+ver: 3.2.18.RELEASE_OSGI2
+-output: ${bsn}-${ver}.jar
+Bundle-Version: ${ver}
+Export-Package: *;version=${ver}

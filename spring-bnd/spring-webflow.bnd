@@ -1,0 +1,6 @@
+-classpath:  spring-webflow-2.4.6.RELEASE.jar
+Bundle-SymbolicName: spring-webflow
+ver: 2.4.6.RELEASE_OSGI2
+-output: ${bsn}-${ver}.jar
+Bundle-Version: ${ver}
+Export-Package: *;version=${ver}
