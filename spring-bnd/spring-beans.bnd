@@ -1,6 +1,6 @@
--classpath:  spring-beans-3.2.18.jahia1.jar
+-classpath:  spring-beans-3.2.18.jahia2.jar
 Bundle-SymbolicName: spring-beans
-ver: 3.2.18.jahia1_OSGI
+ver: 3.2.18.jahia2_OSGI
 -output: ${bsn}-${ver}.jar
 Bundle-Version: ${ver}
 Export-Package: *;version=${ver}
