@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2014 the original author or authors.
+ * Copyright 2002-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,7 +62,7 @@ public class UriComponentsBuilder {
 
 	private static final String HTTP_PATTERN = "(?i)(http|https):";
 
-	private static final String USERINFO_PATTERN = "([^@\\[/?#]*)";
+	private static final String USERINFO_PATTERN = "([^@/?#]*)";
 
 	private static final String HOST_PATTERN = "([^/?#:]*)";
 
