@@ -1,14 +1,17 @@
 buildscript {
 	repositories {
+        maven { url "/home/jerome/.m2/repository" }
 		maven { url "https://repo1.maven.org/maven2/" }
-        maven { url "https://repo.spring.io/plugins-release/" }
+        maven { url "https://repo.spring.io/plugins-snapshot/" }
         maven { url "https://repository.jboss.org/nexus/content/repositories/releases/" }
         maven { url "https://repository.apache.org/content/repositories/releases/" }
         maven { url "https://devtools.jahia.com/nexus/content/groups/public/" }
+        maven { url 'https://repository.jboss.org/nexus/content/repositories/public/' }
 	}
 	dependencies {
-		classpath("org.springframework.build.gradle:propdeps-plugin:0.0.7")
-		classpath("io.spring.gradle:docbook-reference-plugin:0.3.1")
+		//classpath("org.springframework.build.gradle:propdeps-plugin:0.0.7")
+		classpath("io.spring.gradle:propdeps-plugin:0.0.10.RELEASE")
+		classpath("io.spring.gradle:docbook-reference-plugin:0.3.2-SNAPSHOT")
 	}
 }
 
@@ -78,11 +81,11 @@ configure(allprojects) { project ->
 	}
 
 	repositories {
-		maven { url "/Users/rincevent/.m2/repository" }
+		maven { url "/home/jerome/.m2/repository" }
 		maven { url "https://repo1.maven.org/maven2/" }
 		maven { url "https://devtools.jahia.com/nexus/content/groups/public/" }
 		maven { url "https://maven.repository.redhat.com/ga/" }
-		maven { url "https://repo.spring.io/plugins-release/" }
+		maven { url "https://repo.spring.io/plugins-snapshot/" }
         maven { url "https://repository.jboss.org/nexus/content/repositories/releases/" }
         maven { url "https://repository.apache.org/content/repositories/releases/" }
 	}
@@ -469,7 +472,7 @@ project("spring-context-support") {
 		optional("net.sf.ehcache:ehcache-core:2.0.1")
 		optional("org.quartz-scheduler:quartz:1.7.3")
 		optional("org.codehaus.fabric3.api:commonj:1.1.0")
-		optional("velocity:velocity:1.5")
+		optional("org.apache.velocity:velocity:1.5")
 		optional("org.freemarker:freemarker:2.3.20")
 		optional("com.lowagie:itext:2.1.7")
 		optional("net.sf.jasperreports:jasperreports:3.7.6")
@@ -594,7 +597,7 @@ project("spring-webmvc") {
 		optional("javax.servlet:jstl:1.2")
 		optional("net.sourceforge.jexcelapi:jxl:2.6.12")
 		optional("org.apache.poi:poi:3.6")
-		optional("velocity:velocity:1.5")
+		optional("org.apache.velocity:velocity:1.5")
 		optional("velocity-tools:velocity-tools-view:1.4")
 		optional("org.freemarker:freemarker:2.3.20")
 		optional("com.lowagie:itext:2.1.7")
