@@ -1,6 +1,6 @@
--classpath:  spring-web-3.2.18.RELEASE.jar
+-classpath:  spring-web-3.2.18.jahia3.jar
 Bundle-SymbolicName: spring-web
-ver: 3.2.18.RELEASE_OSGI2
+ver: 3.2.18.RELEASE_OSGI3
 -output: ${bsn}-${ver}.jar
 Bundle-Version: ${ver}
 Export-Package: *;version=${ver}
