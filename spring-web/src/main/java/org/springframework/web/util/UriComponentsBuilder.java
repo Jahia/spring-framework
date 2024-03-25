@@ -62,11 +62,15 @@ public class UriComponentsBuilder {
 
 	private static final String HTTP_PATTERN = "(?i)(http|https):";
 
-	private static final String USERINFO_PATTERN = "([^@/?#]*)";
+	private static final String USERINFO_PATTERN = "([^/?#]*)";
 
-	private static final String HOST_PATTERN = "([^/?#:]*)";
+	private static final String HOST_IPV4_PATTERN = "[^/?#:]*";
 
-	private static final String PORT_PATTERN = "(\\d*)";
+	private static final String HOST_IPV6_PATTERN = "\\[[\\p{XDigit}:.]*[%\\p{Alnum}]*]";
+
+	private static final String HOST_PATTERN = "(" + HOST_IPV6_PATTERN + "|" + HOST_IPV4_PATTERN + ")";
+
+	private static final String PORT_PATTERN = "(\\{[^}]+\\}?|[^/?#]*)";
 
 	private static final String PATH_PATTERN = "([^?#]*)";
 
@@ -81,7 +85,7 @@ public class UriComponentsBuilder {
 
 	private static final Pattern HTTP_URL_PATTERN = Pattern.compile(
 			"^" + HTTP_PATTERN + "(//(" + USERINFO_PATTERN + "@)?" + HOST_PATTERN + "(:" + PORT_PATTERN + ")?" + ")?" +
-					PATH_PATTERN + "(\\?" + LAST_PATTERN + ")?");
+					PATH_PATTERN + "(\\?" + QUERY_PATTERN + ")?" + "(#" + LAST_PATTERN + ")?");
 
 
 	private String scheme;
@@ -178,13 +182,14 @@ public class UriComponentsBuilder {
 			}
 			builder.scheme(scheme);
 			if (opaque) {
-				String ssp = uri.substring(scheme.length()).substring(1);
+				String ssp = uri.substring(scheme.length() + 1);
 				if (StringUtils.hasLength(fragment)) {
 					ssp = ssp.substring(0, ssp.length() - (fragment.length() + 1));
 				}
 				builder.schemeSpecificPart(ssp);
 			}
 			else {
+				checkSchemeAndHost(uri, scheme, host);
 				builder.userInfo(userInfo);
 				builder.host(host);
 				if (StringUtils.hasLength(port)) {
@@ -225,13 +230,19 @@ public class UriComponentsBuilder {
 			String scheme = matcher.group(1);
 			builder.scheme(scheme != null ? scheme.toLowerCase() : null);
 			builder.userInfo(matcher.group(4));
-			builder.host(matcher.group(5));
+			String host = matcher.group(5);
+			checkSchemeAndHost(httpUrl, scheme, host);
+			builder.host(host);
 			String port = matcher.group(7);
 			if (StringUtils.hasLength(port)) {
 				builder.port(Integer.parseInt(port));
 			}
 			builder.path(matcher.group(8));
 			builder.query(matcher.group(10));
+			String fragment = matcher.group(12);
+			if (StringUtils.hasText(fragment)) {
+				builder.fragment(fragment);
+			}
 			return builder;
 		}
 		else {
@@ -239,6 +250,14 @@ public class UriComponentsBuilder {
 		}
 	}
 
+	private static void checkSchemeAndHost(String uri, String scheme, String host) {
+		if (StringUtils.hasLength(scheme) && scheme.startsWith("http") && !StringUtils.hasLength(host)) {
+			throw new IllegalArgumentException("[" + uri + "] is not a valid HTTP URL");
+		}
+		if (StringUtils.hasLength(host) && host.startsWith("[") && !host.endsWith("]")) {
+			throw new IllegalArgumentException("Invalid IPV6 host in [" + uri + "]");
+		}
+	}
 
 	// build methods
 
@@ -289,7 +308,6 @@ public class UriComponentsBuilder {
 		return build(false).expand(uriVariableValues);
 	}
 
-
 	// URI components methods
 
 	/**
@@ -315,7 +333,8 @@ public class UriComponentsBuilder {
 				this.port = uri.getPort();
 			}
 			if (StringUtils.hasLength(uri.getRawPath())) {
-				this.pathBuilder = new CompositePathComponentBuilder(uri.getRawPath());
+				this.pathBuilder = new CompositePathComponentBuilder();
+				this.pathBuilder.addPath(uri.getRawPath());
 			}
 			if (StringUtils.hasLength(uri.getRawQuery())) {
 				this.queryParams.clear();

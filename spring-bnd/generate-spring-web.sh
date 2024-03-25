@@ -13,9 +13,8 @@ jar xf spring-web-${version}.jar META-INF ; rm META-INF/MANIFEST.MF ; jar uf spr
 
 mvn install:install-file -Dfile=spring-web-${version}_OSGI.jar -DpomFile=spring-web-${version}.pom
 
-
 # Uncomment the following line for release
-#mvn deploy:deploy-file -DrepositoryId=jahia-releases -Durl=https://devtools.jahia.com/nexus/content/repositories/thirdparty-releases/
-# -Dfile=spring-web-${version}_OSGI3.jar -DpomFile=spring-web-${version}.pom
+mvn deploy:deploy-file -DrepositoryId=jahia-releases -Durl=https://devtools.jahia.com/nexus/content/repositories/thirdparty-releases/
+-Dfile=spring-web-${version}_OSGI.jar -DpomFile=spring-web-${version}.pom
 
 rm *.jar *.pom *.bak
