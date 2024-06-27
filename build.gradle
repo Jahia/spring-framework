@@ -15,6 +15,10 @@ buildscript {
 	}
 }
 
+subprojects {
+	tasks.withType(Javadoc).all { enabled = false }
+}
+
 ext {
 	moduleProjects  = subprojects.findAll {
 		!it.name.equals('spring-build-src') && !it.name.equals('spring-framework-bom')
